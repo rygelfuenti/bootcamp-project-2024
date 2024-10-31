@@ -12,7 +12,7 @@ const blogs: Blog[] = [
     title: "My Coding Journey",
     date: "10/16/24",
     description:"Click For A Look Into My Coding Journey",
-    image: "giphy.gif",
+    image: "/images/rygel.jpeg",
     imageAlt: "Gif of Dog ",
     slug: "CodingJourney",
     },
@@ -20,7 +20,7 @@ const blogs: Blog[] = [
     title: "About Me",
     date: "10/16/24",
     description:"Click To Learn More About Me",
-    image: "gif.gif",
+    image: "/images/rygel2.jpeg",
     imageAlt: "Random Gif",
         slug: "AboutMe",
     }];
