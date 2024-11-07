@@ -42,7 +42,6 @@
   transition: all 0.3s ease;
 }
 
-/* Underline effect */
 .navbar nav a::after {
   content: '';
   position: absolute;
@@ -69,23 +68,22 @@
   transform: scale(0.97);
 }
 
-/* Active link style */
 .active {
-  color: #3498db !important;
-  font-weight: 600 !important;
+  color: #3498db;
+  font-weight: 600;
 }
 
 .active::after {
-  width: calc(100% - 1.6rem) !important;
-  opacity: 1 !important;
-  height: 2.5px !important;
+  width: calc(100% - 1.6rem) ;
+  opacity: 1 ;
+  height: 2.5px;
 }
 
 /* Contact Me button style */
 .contactButton {
   background-color: #3498db;
-  color: white !important;
-  padding: 0.6rem 1.2rem !important;
+  color: white ;
+  padding: 0.6rem 1.2rem ;
   border-radius: 6px;
   font-weight: 500;
   transition: all 0.2s ease;
@@ -101,13 +99,11 @@
   transform: translateY(0);
 }
 
-/* Remove underline effect for Contact button */
+
 .contactButton::after {
   display: none !important;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
   .navbar {
       padding: 0 1.5rem;
   }
@@ -128,5 +124,5 @@
   .contactButton {
       padding: 0.5rem 1rem !important;
   }
-}
+
 
