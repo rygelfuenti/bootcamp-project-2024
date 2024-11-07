@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function WorkExperience() {
     return (
-        <div className="top-20 right-8 w-80 p-6 rounded-lg shadow-md">
+        <div className="w-80 p-6 rounded-lg shadow-md">
         <h3 className="text-lg font--apple-system- mb-4">Work Experience</h3>
         <div className='space-y-4'>
         <Image
