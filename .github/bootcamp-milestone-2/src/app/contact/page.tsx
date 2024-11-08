@@ -1,34 +1,12 @@
-"use client"
-import React, { useRef, FormEvent } from 'react';
-import emailjs from '@emailjs/browser';
+
+import React from 'react';
 
 
-{/*Implemented This Code From Youtube Video */}
+
 export default function ContactUs() {
-  const form = useRef<HTMLFormElement | null>(null);
-
-  const sendEmail = (e: FormEvent) => {
-    e.preventDefault();
-
-    if (form.current) {
-      emailjs
-        .sendForm('service_rsgvr3a', 'template_4rzz5sh', form.current, {
-          publicKey: 'NW-05nhrPzHvK504f',
-        })
-        .then(
-          () => {
-            console.log('SUCCESS!');
-          },
-          (error) => {
-            console.log('FAILED...', error.text);
-          },
-        );
-    }
-  };
-
   return (
     <div className="w-full max-w-md mx-auto p-6">
-    <form ref={form} onSubmit={sendEmail} className="space-y-4">
+    <form className="space-y-4">
       <label className="block text-sm font--apple-system- text-gray-700">
         Name
       </label>
