@@ -1,9 +1,36 @@
 import Image from "next/image";
-import blogs from '@/app/blogData';
 import BlogPreview from '@/components/blogPreview';
 import WorkExperience from'@/components/workexperience';
+import connectDB from '@/database/db';
+import Blog from '@/database/blogSchema';
 
-export default function Home() {
+async function getBlogs(){
+  await connectDB() // function from db.ts before
+
+  try {
+    // query for all blogs and sort by date
+    const blogs = await Blog.find().sort({ date: -1 }).lean();
+    return JSON.parse(JSON.stringify(blogs)); // Serialize the data
+  } catch (err) {
+    console.error("Failed to fetch blogs:", err);
+    return [];
+  }
+}
+
+export default async function Home() {
+  const blogs = await getBlogs();
+
+  let blogContent;
+  if (blogs && blogs.length > 0) {
+    blogContent = blogs.map((blog: any) => (
+      <div key={blog._id}>
+        <BlogPreview {...blog}/>
+      </div>
+    ));
+  } else {
+    blogContent = <p className='text-center text-gray-700'> No Blogs Found.</p>
+  }
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 py-16 px-4">
       {/* Introduction Section */}
@@ -30,11 +57,7 @@ export default function Home() {
       {/* Main}
       {/* Blog Section */}
       <div >
-        {blogs.map(blog => (
-          <div key={blog.title}>
-            <BlogPreview {...blog}/>
-          </div>
-        ))}
+      {blogContent}
       </div>
       {/* Work Experience Section */}
       <div>
@@ -43,3 +66,4 @@ export default function Home() {
     </div>
   );
 }
+

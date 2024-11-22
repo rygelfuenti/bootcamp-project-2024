@@ -5,6 +5,8 @@ import { Blog } from '@/app/blogData';
 import Link from 'next/link'
 
 export default function BlogPreview(props: Blog) {
+  const imageURL = props.image  || '/images/default.jpg';
+
   return (
 		// replace everything between the <div> & </div> tags
 		// with your code from earlier milestones
@@ -14,8 +16,8 @@ export default function BlogPreview(props: Blog) {
         <div className={style.imageWrapper}> 
           <Link href={`/blogs/${props.slug}`}>
 				<Image 
-        src={props.image} 
-        alt={props.imageAlt} 
+        src={imageURL} 
+        alt={props.imageAlt  || 'Default Text'} 
         fill
         ></Image>
         </Link>
