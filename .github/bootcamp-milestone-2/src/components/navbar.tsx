@@ -16,6 +16,7 @@ export default function Navbar() {
          */}
         <Link href="/" >Home</Link>
         <Link href="/resume" >Resume</Link>
+        <Link href='/portfolio'>Portfolio</Link>
         <Link href="/contact" >Contact Me</Link>
 				{/* More Links ... */}
       </nav>

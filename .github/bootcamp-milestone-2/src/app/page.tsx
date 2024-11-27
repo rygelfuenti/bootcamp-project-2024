@@ -3,14 +3,14 @@ import BlogPreview from '@/components/blogPreview';
 import WorkExperience from'@/components/workexperience';
 import connectDB from '@/database/db';
 import Blog from '@/database/blogSchema';
-
+import style from '@/components/blogPreview.module.css'
 async function getBlogs(){
   await connectDB() // function from db.ts before
 
   try {
     // query for all blogs and sort by date
     const blogs = await Blog.find().sort({ date: -1 }).lean();
-    return JSON.parse(JSON.stringify(blogs)); // Serialize the data
+    return blogs; // Serialize the data
   } catch (err) {
     console.error("Failed to fetch blogs:", err);
     return [];
@@ -56,7 +56,7 @@ export default async function Home() {
       </div>
       {/* Main}
       {/* Blog Section */}
-      <div >
+      <div>
       {blogContent}
       </div>
       {/* Work Experience Section */}
