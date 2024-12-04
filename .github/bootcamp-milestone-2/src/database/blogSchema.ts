@@ -9,9 +9,21 @@ type Blog = {
     imageAlt: string;
     slug: string;
     content: string;  // for individual blog page
-    comments: Comment[];
+    comments: IComment[];
     };
 
+export type IComment = {
+    user: string;
+    comment: string;
+    time: Date;
+}
+
+//comment Schema
+const commentSchema = new Schema<IComment>({
+    user: {type: String, required: true },
+    comment: { type: String, required: true },
+    time: { type: Date, required: true, default: Date.now },
+})
 //mongoose schema
 const blogSchema = new Schema<Blog>({
     title: { type: String, required: true},
@@ -21,6 +33,7 @@ const blogSchema = new Schema<Blog>({
     content: { type: String, required: true},
     image: {type: String, required: false},
     imageAlt: {type: String, required: false},
+    comments: { type: [commentSchema], required: false, default: [] },
 })
 
 //defining the collection and model
