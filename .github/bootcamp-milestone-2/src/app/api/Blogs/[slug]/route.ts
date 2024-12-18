@@ -21,3 +21,8 @@ export async function GET(req: NextRequest, { params }: IParams) {
 	        return NextResponse.json('Blog not found.', { status: 404 })
 	    }
 }
+
+export async function POST(req: NextRequest) {
+	const body = req.body
+	const BlogSlug = 
+}
