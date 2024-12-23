@@ -1,56 +1,116 @@
-import connectDB from '@/database/db';
+"use client"
+import React, { useEffect, useState } from 'react';
 import Comment from '@/components/comment';
-import { IComment } from '@/database/blogSchema';
+import { IComment, Blog } from '@/database/blogSchema';
 
 type Props = {
-    params: {slug: string}
-}
+  params: { slug: string }
+};
 
-async function getBlog(slug: string) {
-	try {
-		// This fetches the blog from an api endpoint that would GET the blog
-		const res = await fetch(`http://localhost:3000/api/blog/${slug}`, {
-			cache: "no-store",	
-		})
-		// This checks that the GET request was successful
-		if (!res.ok) {
-			throw new Error("Failed to fetch blog");
-		}
+export default function BlogPage({ params }: Props) {
+  const { slug } = params;
+  const [blog, setBlog] = useState<Blog | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-		return res.json();
-	} catch (err: unknown) {
-		console.log(`error: ${err}`);
-		return null;
-		// `` are a special way of allowing JS inside a string
-		// Instead of "error: " + err, we can just do the above
-		// it is simular to formated strings in python --> f"{err}"
-	}
-}
+  useEffect(() => {
+    if (!slug) return;
 
-export default async function Blog({ params }: Props) {
-	const { slug } = params;
-	const blog = await getBlog(slug);
-	
-    if (!blog) {
-        return (
-            <div className='flex items-center justify-center'>
-                <p className='text-center text-gray-700 font--apple-system-'> Blog Post Not Found.</p>
-            </div>
-        )
+    const fetchBlog = async () => {
+      try {
+        const response = await fetch(`/api/blogs/${slug}`, {
+          cache: 'no-store',
+        });
+
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('No Blogs Found');
+          } else {
+            throw new Error('Not Working');
+          }
+        }
+
+        const data = await response.json();
+        setBlog(data);
+        setLoading(false);
+      } catch (err) {
+        const errorMessage = (err as Error).message;
+        setError(errorMessage);
+        console.error('Error with Fetching:', errorMessage);
+        setLoading(false);
+      }
+    };
+
+    fetchBlog();
+  }, [slug]);
+
+  const SubmitComment = async (formData: { user: string; comment: string }) => {
+    const newComment = { user: formData.user, comment: formData.comment };
+    try {
+      const res = await fetch(`/api/blogs/${slug}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newComment),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to submit comment');
+      }
+
+      const updatedBlog = await res.json();
+      setBlog(updatedBlog);
+    } catch (err: unknown) {
+      console.error('Error submitting comment:', err);
+      setError((err as Error).message);
     }
-	return (
-		<div className='space-y-12'>
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!blog) {
+    return <div>No blog found</div>;
+  }
+
+  return (
+    <div className='min-h-screen bg-gradient-to-b from-white to-gray-50 py-16 px-4'>
+      <div className='max-w-4xl mx-auto space-y-12'>
         <h1 className="text-6xl md:text-7xl font-bold text-center text-gray-800 
                        hover:text-blue-600 transform hover:scale-105 
-                       transition-all duration-300 ease-in-out">{blog.title}</h1>
-
-		<p className="flex justify-center text-2xl text-gray-800 font--apple-system-">{blog.content}</p>
-		<h3 className='text-6xl md:text-7xl font-bold text-center text-gray-800 
-                       hover:text-blue-600 transform hover:scale-105 
-                       transition-all duration-300 ease-in-out'>Comments</h3>
-		{blog.comments.map((comment: IComment, index: number) => (
-			<Comment key={index} comment={comment} />
-		))}
+                       transition-all duration-300 ease-in-out">
+          {blog.title}
+        </h1>
+        <p className="flex justify-center text-2xl text-gray-800 font--apple-system-">
+          {blog.description}
+        </p>
+        <div className="prose mx-auto">
+          <p>{blog.content}</p>
         </div>
-    );
+        <h3 className="text-4xl font-bold text-center text-gray-800 mt-8">Comments</h3>
+        <div className="space-y-4">
+          {blog.comments.map((comment: IComment, index: number) => (
+            <Comment key={index} comment={comment} />
+          ))}
+        </div>
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target as HTMLFormElement);
+            const user = formData.get('user') as string;
+            const comment = formData.get('comment') as string;
+            await SubmitComment({ user, comment });
+          }}
+        >
+          <input type="text" name="user" placeholder="Your name" required />
+          <textarea name="comment" placeholder="Your comment" required></textarea>
+          <button type="submit">Submit Comment</button>
+        </form>
+      </div>
+    </div>
+  );
 }

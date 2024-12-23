@@ -5,13 +5,13 @@ import emailjs from '@emailjs/browser';
 export default function ContactUs() {
   const form = useRef<HTMLFormElement | null>(null);
 
-  const sendEmail = (e: FormEvent) => {
+  const sendEmail = async (e: FormEvent) => {
     e.preventDefault();
 
     if (form.current) {
       emailjs
         .sendForm('service_rsgvr3a', 'template_4rzz5sh', form.current, 
-        process.env.EMAIL_JS_PUBLIC_KEY
+        process.env.NEXT_PUBLIC_EMAIL_JS_PUBLIC_KEY
         )
         .then(
           () => {
