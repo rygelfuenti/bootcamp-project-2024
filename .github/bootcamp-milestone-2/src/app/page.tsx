@@ -18,18 +18,6 @@ async function getBlogs(){
 
 export default async function Home() {
   const blogs = await getBlogs();
-
-  let blogContent;
-  if (blogs && blogs.length > 0) {
-    blogContent = blogs.map((blog: any) => (
-      <div key={blog._id}>
-        <BlogPreview {...blog}/>
-      </div>
-    ));
-  } else {
-    blogContent = <p className='text-center text-gray-700'> No Blogs Found.</p>
-  }
-  
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 py-16 px-4">
       {/* Introduction Section */}
@@ -54,12 +42,8 @@ export default async function Home() {
         </p>
       </div>
       {/* Main}
-      {/* Blog Section */}
-      <div>
-      {blogContent}
-      </div>
       {/* Work Experience Section */}
-      <div>
+      <div className='flex justify-center items-center mt-12'>
         <WorkExperience />
       </div>
     </div>

@@ -22,13 +22,13 @@ export type IComment = {
 const commentSchema = new Schema<IComment>({
     user: {type: String, required: true },
     comment: { type: String, required: true },
-    time: { type: Date, required: true, default: Date.now },
+    time: { type: Date, required: false, default: Date.now },
 })
 //mongoose schema
 const blogSchema = new Schema<Blog>({
     title: { type: String, required: true},
     slug: { type: String, required: true},
-    date: { type: Date, required: false, default: new Date()},
+    date: { type: Date, requred: false, default: new Date()},
     description: {type: String, required: true },
     content: { type: String, required: true},
     image: {type: String, required: false},

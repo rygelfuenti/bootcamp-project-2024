@@ -1,14 +1,32 @@
-"use client"
-import React, { useEffect, useState } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
 import Comment from '@/components/comment';
+import { useParams } from 'next/navigation';
 import { IComment, Blog } from '@/database/blogSchema';
 
-type Props = {
-  params: { slug: string }
-};
+async function getBlog(slug: string) {
+  try {
+    // This fetches the blog from an api endpoint that would GET the blog
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/Blogs/${slug}`, {
+      cache: 'no-store',
+    });
 
-export default function BlogPage({ params }: Props) {
-  const { slug } = params;
+    // This checks that the GET request was successful
+    if (!res.ok) {
+      throw new Error('Failed to fetch blog');
+    }
+
+    return res.json();
+  } catch (err: unknown) {
+    console.log(`error: ${err}`);
+    return null;
+  }
+}
+
+export default function BlogPage() {
+  const params = useParams();
+  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
   const [blog, setBlog] = useState<Blog | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -17,26 +35,12 @@ export default function BlogPage({ params }: Props) {
     if (!slug) return;
 
     const fetchBlog = async () => {
-      try {
-        const response = await fetch(`/api/blogs/${slug}`, {
-          cache: 'no-store',
-        });
-
-        if (!response.ok) {
-          if (response.status === 404) {
-            throw new Error('No Blogs Found');
-          } else {
-            throw new Error('Not Working');
-          }
-        }
-
-        const data = await response.json();
+      const data = await getBlog(slug);
+      if (data) {
         setBlog(data);
         setLoading(false);
-      } catch (err) {
-        const errorMessage = (err as Error).message;
-        setError(errorMessage);
-        console.error('Error with Fetching:', errorMessage);
+      } else {
+        setError('Failed to fetch blog');
         setLoading(false);
       }
     };
@@ -45,22 +49,18 @@ export default function BlogPage({ params }: Props) {
   }, [slug]);
 
   const SubmitComment = async (formData: { user: string; comment: string }) => {
-    const newComment = { user: formData.user, comment: formData.comment };
     try {
-      const res = await fetch(`/api/blogs/${slug}`, {
+      const res = await fetch(`/api/blogs/${slug}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newComment),
+        body: JSON.stringify(formData),
       });
-
       if (!res.ok) {
         throw new Error('Failed to submit comment');
       }
-
       const updatedBlog = await res.json();
       setBlog(updatedBlog);
     } catch (err: unknown) {
-      console.error('Error submitting comment:', err);
       setError((err as Error).message);
     }
   };
@@ -70,7 +70,7 @@ export default function BlogPage({ params }: Props) {
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div>{error}</div>;
   }
 
   if (!blog) {
@@ -85,9 +85,6 @@ export default function BlogPage({ params }: Props) {
                        transition-all duration-300 ease-in-out">
           {blog.title}
         </h1>
-        <p className="flex justify-center text-2xl text-gray-800 font--apple-system-">
-          {blog.description}
-        </p>
         <div className="prose mx-auto">
           <p>{blog.content}</p>
         </div>
