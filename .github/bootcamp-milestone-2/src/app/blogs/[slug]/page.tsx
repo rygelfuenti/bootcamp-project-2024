@@ -60,7 +60,6 @@ export default function BlogPage() {
       if (!res.ok) {
         throw new Error('Failed to submit comment');
       }
-      const newComment = await res.json();
 
       const formattedComment: IComment = {
         user: formData.user,
