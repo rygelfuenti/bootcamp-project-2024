@@ -5,7 +5,7 @@ import Comment from '@/components/comment';
 import { useParams } from 'next/navigation';
 import { IComment, Blog } from '@/database/blogSchema';
 
-async function getBlog(slug: string) 
+async function getBlog(slug: string) {
   try {
     // This fetches the blog from an api endpoint that would GET the blog
   const res = await fetch(`https://rygels-portfolio.vercel.app/api/blogs/${slug}`, {
