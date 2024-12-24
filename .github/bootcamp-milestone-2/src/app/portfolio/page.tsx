@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 import connectDB from '@/database/db';
 import Project from '@/database/projectSchema';
 import ProjectPreview from '@/components/projectPreview';
@@ -12,7 +11,7 @@ async function getProjects(){
 		const projects = await Project.find().sort({ date: -1 }).lean();
 			// send a response as the blogs as the message
 	    return projects
-	} catch (err) {
+	} catch {
 	    return null
 	}
 }

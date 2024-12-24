@@ -1,23 +1,6 @@
-import Image from "next/image";
-import BlogPreview from '@/components/blogPreview';
 import WorkExperience from'@/components/workexperience';
-import connectDB from '@/database/db';
-import Blog from '@/database/blogSchema';
-async function getBlogs(){
-  await connectDB() // function from db.ts before
-
-  try {
-    // query for all blogs and sort by date
-    const blogs = await Blog.find().sort({ date: -1 }).lean();
-    return blogs; // Serialize the data
-  } catch (err) {
-    console.error("Failed to fetch blogs:", err);
-    return [];
-  }
-}
 
 export default async function Home() {
-  const blogs = await getBlogs();
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 py-16 px-4">
       {/* Introduction Section */}
