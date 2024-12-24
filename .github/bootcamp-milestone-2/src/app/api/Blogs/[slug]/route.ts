@@ -16,8 +16,11 @@ export async function GET(req: NextRequest, { params }: IParams) {
 
 	   try {
 	        const blog = await blogSchema.findOne({ slug }).orFail()
-	        return NextResponse.json(blog)
-	    } catch (err) {
+
+          const res = NextResponse.json(blog);
+          res.headers.set('Access-Control-Allow-Origin', '*');
+          return res;
+	    } catch {
 	        return NextResponse.json('Blog not found.', { status: 404 })
 	    }
 }
