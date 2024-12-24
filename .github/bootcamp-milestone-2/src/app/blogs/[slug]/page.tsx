@@ -17,7 +17,7 @@ async function getBlog(slug: string) {
       throw new Error('Failed to Fetch Blog');
     }
 
-    return res.json();
+    return await res.json();
   } catch (err: unknown) {
     console.log(`error: ${err}`);
     return null;
@@ -27,22 +27,26 @@ async function getBlog(slug: string) {
 export default function BlogPage() {
   const params = useParams();
   const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
+  console.log('Slug', slug);
   const [blog, setBlog] = useState<Blog | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!slug) return;
+    if (!slug){
+      setError('No slug provided');
+      setLoading(false);
+      return;
+    }
 
     const fetchBlog = async () => {
       const data = await getBlog(slug);
       if (data) {
         setBlog(data);
-        setLoading(false);
       } else {
         setError('Failed to fetch blog');
-        setLoading(false);
       }
+      setLoading(false);
     };
 
     fetchBlog();
