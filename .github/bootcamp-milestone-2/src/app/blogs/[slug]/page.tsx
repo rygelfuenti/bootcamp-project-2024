@@ -9,7 +9,7 @@ async function getBlog(slug: string) {
   const VercelUrl = process.env.NEXT_PUBLIC_URL
   try {
     // This fetches the blog from an api endpoint that would GET the blog
-    const res = await fetch(`https://bootcamp-project-2024-tau.vercel.app/api/blogs/${slug}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/blogs/${slug}`, {
       cache: 'no-store',
     });
 
@@ -51,7 +51,7 @@ export default function BlogPage() {
 
   const SubmitComment = async (formData: { user: string; comment: string }) => {
     try {
-      const res = await fetch(`https://bootcamp-project-2024-tau.vercel.app/api/blogs/${slug}/comments`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/blogs/${slug}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
