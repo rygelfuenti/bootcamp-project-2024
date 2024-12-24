@@ -33,7 +33,7 @@ const blogSchema = new Schema<Blog>({
     content: { type: String, required: true},
     image: {type: String, required: false},
     imageAlt: {type: String, required: false},
-    comments: { type: [commentSchema], required: false, default: [] },
+    comments: { type: [commentSchema], default: [] },
 })
 
 //defining the collection and model
