@@ -6,11 +6,9 @@ import { useParams } from 'next/navigation';
 import { IComment, Blog } from '@/database/blogSchema';
 
 async function getBlog(slug: string) {
-  const VercelUrl = `https://rygels-portfolio.vercel.app`;
-  
   try {
     // This fetches the blog from an api endpoint that would GET the blog
-    const res = await fetch(`${VercelUrl}/api/Blogs/${slug}`, {
+    const res = await fetch(`/api/Blogs/${slug}`, {
       cache: 'no-store',
     });
 
@@ -51,9 +49,8 @@ export default function BlogPage() {
   }, [slug]);
 
   const SubmitComment = async (formData: { user: string; comment: string }) => {
-  const VercelUrl = `https://rygels-portfolio.vercel.app`;
     try {
-      const res = await fetch(`${VercelUrl}/api/Blogs/${slug}/comments`, {
+      const res = await fetch(`/api/Blogs/${slug}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
