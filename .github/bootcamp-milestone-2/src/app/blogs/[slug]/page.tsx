@@ -6,9 +6,10 @@ import { useParams } from 'next/navigation';
 import { IComment, Blog } from '@/database/blogSchema';
 
 async function getBlog(slug: string) {
+  const VercelUrl = `https://rygels-portfolio.vercel.app`;
   try {
     // This fetches the blog from an api endpoint that would GET the blog
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/Blogs/${slug}`, {
+    const res = await fetch(`${VercelUrl}/api/Blogs/${slug}`, {
       cache: 'no-store',
     });
 
