@@ -3,6 +3,13 @@ import connectDB from '@/database/db';
 import BlogModel from '@/database/blogSchema';
 import { IComment } from '@/database/blogSchema';
 
+export async function OPTIONS(req: NextRequest) { const headers = new Headers(); 
+  headers.set('Access-Control-Allow-Origin', '*'); 
+  headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); 
+  headers.set('Access-Control-Allow-Headers', 'Content-Type'); 
+    return NextResponse.json(null, { headers });
+  }
+
 export async function POST(req: NextRequest) {
   await connectDB();
   
@@ -37,7 +44,7 @@ export async function POST(req: NextRequest) {
 
     res.headers.set('Access-Control-Allow-Origin', '*');
     return res;
-    
+
   } catch (err) {
     console.error("Error saving comment:", err);
     return NextResponse.json({ error: "Comment unsaved" }, { status: 500 });
