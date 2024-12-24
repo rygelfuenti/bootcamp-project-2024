@@ -2,15 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/database/db';
 import BlogModel from '@/database/blogSchema';
 
-interface IParams {
-  params: {
-    slug: string;
-  };
-}
 
-export async function GET(req: NextRequest, { params }: IParams) {
+export async function GET(req: NextRequest) {
   await connectDB(); // function from db.ts before
-  const { slug } = params; // another destructure
+  const  slug = req.nextUrl.pathname.split('/').pop();
 
   try {
     const blog = await BlogModel.findOne({ slug }).orFail();
