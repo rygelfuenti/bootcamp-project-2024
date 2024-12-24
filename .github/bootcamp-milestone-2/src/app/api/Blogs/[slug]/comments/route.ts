@@ -33,7 +33,11 @@ export async function POST(req: NextRequest) {
 
     await blog.save();
     
-    return NextResponse.json({ comments: blog.comments }, { status: 200});
+    const res = NextResponse.json({ comments: blog.comments }, { status: 200});
+
+    res.headers.set('Access-Control-Allow-Origin', '*');
+    return res;
+    
   } catch (err) {
     console.error("Error saving comment:", err);
     return NextResponse.json({ error: "Comment unsaved" }, { status: 500 });
